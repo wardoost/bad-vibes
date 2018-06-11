@@ -1,6 +1,7 @@
 import React, { Component, createContext } from 'react'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
+import contract from 'truffle-contract'
 
 import { connectContext } from '../utils/react-helpers'
 import { getCoinbase } from '../utils/web3-helpers'
@@ -14,6 +15,7 @@ export const withWeb3 = connectContext(Web3Context)
 // Create provider which holds all state and actions
 export default class Web3Provider extends Component {
   static propTypes = {
+    contract: PropTypes.object.isRequired,
     children: PropTypes.node
   }
 
@@ -36,7 +38,7 @@ export default class Web3Provider extends Component {
 
         console.log('Injected web3 detected.')
 
-        this.getCoinbase(web3)
+        this.initialise(web3)
       } else {
         // Fallback to localhost if no web3 injection. We've configured this to
         // use the development console's port by default.
@@ -48,15 +50,32 @@ export default class Web3Provider extends Component {
 
         console.log('No web3 instance injected, using Local web3.')
 
-        this.getCoinbase(web3)
+        this.initialise(web3)
       }
     })
   }
 
-  getCoinbase = async web3 => {
+  initialise = async web3 => {
     try {
+      const instance = contract(this.props.contract)
+      instance.setProvider(web3.currentProvider)
+      const contractInstance = await instance.deployed()
       const coinbase = await getCoinbase(web3)
-      this.setState({ web3, coinbase, loading: false, error: null })
+
+      this.setState({
+        web3,
+        contract: contractInstance,
+        coinbase,
+        loading: false,
+        error: null
+      })
+
+      web3.currentProvider.publicConfigStore.on(
+        'update',
+        ({ selectedAddress }) => {
+          this.setState({ coinbase: selectedAddress })
+        }
+      )
     } catch (error) {
       this.setState({ error, loading: false })
     }

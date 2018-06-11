@@ -3,8 +3,33 @@ import { Redirect } from 'react-router-dom'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { Loader } from 'semantic-ui-react'
 
+import { Web3Context } from '../providers/web3'
 import { BadVibesContext } from '../providers/bad-vibes'
 import { getDisplayName } from './react-helpers'
+
+export const requireInitialised = WrappedComponent => {
+  class RequireInitialised extends Component {
+    render() {
+      return (
+        <Web3Context.Consumer>
+          {({ state }) => {
+            if (!state.web3) {
+              return <Loader active>Initialising</Loader>
+            }
+
+            return <WrappedComponent {...this.props} />
+          }}
+        </Web3Context.Consumer>
+      )
+    }
+  }
+
+  RequireInitialised.displayName = `requireInitialised(${getDisplayName(
+    WrappedComponent
+  )})`
+  hoistNonReactStatics(RequireInitialised, WrappedComponent)
+  return RequireInitialised
+}
 
 export const requireAuth = WrappedComponent => {
   class RequireAuth extends Component {
@@ -12,8 +37,8 @@ export const requireAuth = WrappedComponent => {
       return (
         <BadVibesContext.Consumer>
           {({ state }) => {
-            if (state.authenticating) {
-              return <Loader active>Authenticating</Loader>
+            if (state.needAuth) {
+              return <Loader active>Initialising</Loader>
             }
 
             if (!state.username) {
@@ -28,7 +53,7 @@ export const requireAuth = WrappedComponent => {
   }
   RequireAuth.displayName = `requireAuth(${getDisplayName(WrappedComponent)})`
   hoistNonReactStatics(RequireAuth, WrappedComponent)
-  return RequireAuth
+  return requireInitialised(RequireAuth)
 }
 
 export const requireNoAuth = WrappedComponent => {
@@ -37,8 +62,8 @@ export const requireNoAuth = WrappedComponent => {
       return (
         <BadVibesContext.Consumer>
           {({ state }) => {
-            if (state.authenticating) {
-              return <Loader active>Authenticating</Loader>
+            if (state.needAuth) {
+              return <Loader active>Initialising</Loader>
             }
 
             if (state.username) {
@@ -56,5 +81,5 @@ export const requireNoAuth = WrappedComponent => {
     WrappedComponent
   )})`
   hoistNonReactStatics(RequireNoAuth, WrappedComponent)
-  return RequireNoAuth
+  return requireInitialised(RequireNoAuth)
 }

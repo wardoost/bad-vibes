@@ -15,7 +15,7 @@ class CreatePost extends Component {
   }
 
   static defaultProps = {
-    placeholder: 'Write a shitty message'
+    placeholder: 'Share a shitty message'
   }
 
   state = {

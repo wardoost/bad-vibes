@@ -1,11 +1,9 @@
 import React, { Component, createContext } from 'react'
 import PropTypes from 'prop-types'
-import contract from 'truffle-contract'
 
 import { connectContext } from '../utils/react-helpers'
 import { validateMessage, validateUsername } from '../utils/validation'
 import { withWeb3 } from './web3'
-import BadVibesContract from '../../build/contracts/BadVibes.json'
 
 // Create context with React Context API
 export const BadVibesContext = createContext()
@@ -17,80 +15,96 @@ export const withBadVibes = connectContext(BadVibesContext)
 class BadVibesProvider extends Component {
   static propTypes = {
     web3: PropTypes.object,
+    contract: PropTypes.object,
     coinbase: PropTypes.string,
     children: PropTypes.node
   }
 
   state = {
+    coinbase: null,
     username: '',
-    contractInstance: null,
     posts: [],
     address: null,
     addressUsername: '',
     total: 0,
     pageLimit: 10,
+    initialised: false,
+    needAuth: false,
     authenticating: false,
     loading: false,
     error: null
   }
 
-  componentDidUpdate() {
-    if (
-      !this.state.contractInstance &&
-      this.props.web3 &&
-      !this.state.authenticating
-    ) {
-      this.initialise()
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const initialised = nextProps.web3 && nextProps.contract
+
+    return {
+      coinbase: nextProps.coinbase,
+      initialised,
+      needAuth: !initialised || nextProps.coinbase !== prevState.coinbase
     }
   }
 
-  initialise = async () => {
-    this.setState({ authenticating: true })
+  componentDidUpdate() {
+    if (this.state.initialised && this.state.needAuth) {
+      // Authenticate and hook up event listeners
+      this.authenticate().then(() => {
+        this.props.contract.LogNewPost((error, result) => {
+          console.log('LogNewPost', this.state, error || result)
+
+          if (!this.state.loading) {
+            if (result) {
+              const { message, author, index } = result.args
+
+              this.setState(prevState => ({
+                count: index.toNumber() + 1,
+                posts:
+                  !prevState.address || author !== prevState.address
+                    ? [{ message, author }, ...prevState.posts]
+                    : prevState.posts
+              }))
+            } else if (error) {
+              this.setState({ error })
+            }
+          }
+        })
+      })
+    }
+  }
+
+  authenticate = async () => {
+    this.setState({
+      username: '',
+      needAuth: false,
+      authenticating: true
+    })
 
     try {
       if (!this.props.web3) {
         throw new Error('Web3 is not initialised')
       }
 
-      const posts = contract(BadVibesContract)
-      posts.setProvider(this.props.web3.currentProvider)
-      const contractInstance = await posts.deployed()
-
-      // Hook up event listeners
-      contractInstance.LogNewPost((error, result) => {
-        console.log('LogNewPost', this.state, error || result)
-
-        if (!this.state.loading) {
-          if (result) {
-            const { message, author, index } = result.args
-
-            this.setState(prevState => ({
-              count: index.toNumber() + 1,
-              posts:
-                prevState.address && author !== prevState.address
-                  ? prevState.posts
-                  : [{ message, author }, ...prevState.posts]
-            }))
-          } else if (error) {
-            this.setState({ error })
-          }
-        }
-      })
+      if (!this.props.contract) {
+        throw new Error('Contract is not initialised')
+      }
 
       // Try logging in with current wallet
-      const authenticated = await contractInstance.isUser(this.props.coinbase)
+      const authenticated = await this.props.contract.isUser(
+        this.props.coinbase
+      )
 
       if (authenticated) {
-        const username = await contractInstance.getUsername(this.props.coinbase)
+        const username = await this.props.contract.getUsername(
+          this.props.coinbase
+        )
 
         this.setState({
           username,
-          contractInstance,
           authenticating: false,
           error: null
         })
       } else {
-        this.setState({ contractInstance, authenticating: false, error: null })
+        this.setState({ authenticating: false, error: null })
       }
     } catch (error) {
       this.setState({ error, authenticating: false })
@@ -105,13 +119,13 @@ class BadVibesProvider extends Component {
 
       this.setState({ loading: true })
 
-      if (!this.state.contractInstance) {
+      if (!this.props.contract) {
         throw new Error('Contract is not initialised')
       }
 
       await validateUsername(username)
 
-      const { isUser, join } = this.state.contractInstance
+      const { isUser, join } = this.state.contract
       const authenticated = await isUser(this.props.coinbase)
 
       if (authenticated) {
@@ -139,11 +153,11 @@ class BadVibesProvider extends Component {
   }
 
   formatPost = async ([message, author]) => {
-    if (!this.state.contractInstance) {
+    if (!this.props.contract) {
       throw new Error('Contract is not initialised')
     }
 
-    const { isUser, getUsername } = this.state.contractInstance
+    const { isUser, getUsername } = this.props.contract
     const authenticated = await isUser(author)
 
     if (!authenticated) {
@@ -162,19 +176,9 @@ class BadVibesProvider extends Component {
     }
   }
 
-  loadMyPosts = async (page = 1) => {
+  loadMyPosts = async (page = 1, limit = this.state.pageLimit) => {
     try {
-      if (this.state.loading) {
-        throw new Error('Already loading data')
-      }
-
-      this.setState({ loading: true })
-
-      if (!this.state.contractInstance) {
-        throw new Error('Contract is not initialised')
-      }
-
-      this.loadUserPosts(this.props.coinbase, page)
+      this.loadUserPosts(this.props.coinbase, page, limit)
     } catch (error) {
       this.setState({ error, loading: false })
     }
@@ -188,7 +192,7 @@ class BadVibesProvider extends Component {
 
       this.setState({ address, loading: true })
 
-      if (!this.state.contractInstance) {
+      if (!this.props.contract) {
         throw new Error('Contract is not initialised')
       }
 
@@ -198,7 +202,7 @@ class BadVibesProvider extends Component {
         getPostAtIndex,
         getPostOfUserCount,
         getPostOfUserAtIndex
-      } = this.state.contractInstance
+      } = this.props.contract
 
       const postPromises = []
       const count = await getPostOfUserCount(address)
@@ -247,11 +251,11 @@ class BadVibesProvider extends Component {
 
       this.setState({ loading: true })
 
-      if (!this.state.contractInstance) {
+      if (!this.props.contract) {
         throw new Error('Contract is not initialised')
       }
 
-      const { getPostCount, getPostAtIndex } = this.state.contractInstance
+      const { getPostCount, getPostAtIndex } = this.props.contract
       const postPromises = []
       const count = await getPostCount()
       const total = count.toNumber()
@@ -299,12 +303,20 @@ class BadVibesProvider extends Component {
   }
 
   createPost = async message => {
-    this.setState({ error: null, loading: true })
-
     try {
+      if (this.state.loading) {
+        throw new Error('Already loading data')
+      }
+
+      this.setState({ loading: true })
+
+      if (!this.props.contract) {
+        throw new Error('Contract is not initialised')
+      }
+
       await validateMessage(message)
 
-      const { createPost } = this.state.contractInstance
+      const { createPost } = this.props.contract
       const result = await createPost(message, {
         from: this.props.coinbase
       })
@@ -351,7 +363,8 @@ class BadVibesProvider extends Component {
   }
 }
 
-export default withWeb3(({ web3, coinbase }) => ({
+export default withWeb3(({ web3, contract, coinbase }) => ({
   web3,
+  contract,
   coinbase
 }))(BadVibesProvider)

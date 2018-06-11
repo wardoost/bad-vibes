@@ -10,20 +10,28 @@ import Profile from './pages/profile'
 import User from './pages/user'
 import Error from './pages/error'
 import Layout from './components/Layout'
-import { requireAuth, requireNoAuth } from './utils/authentication'
+import BadVibesContract from '../build/contracts/BadVibes.json'
+import {
+  requireInitialised,
+  requireAuth,
+  requireNoAuth
+} from './utils/authentication'
 
 class App extends Component {
   render() {
     return (
-      <Web3Provider>
+      <Web3Provider contract={BadVibesContract}>
         <BadVibesProvider>
           <Router>
             <Layout>
               <Switch>
-                <Route path="/" exact component={Home} />
+                <Route path="/" exact component={requireInitialised(Home)} />
                 <Route path="/join" component={requireNoAuth(Join)} />
                 <Route path="/profile" component={requireAuth(Profile)} />
-                <Route path="/users/:address" component={User} />
+                <Route
+                  path="/users/:address"
+                  component={requireInitialised(User)}
+                />
                 <Route component={Error} />
               </Switch>
             </Layout>
