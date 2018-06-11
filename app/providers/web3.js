@@ -21,7 +21,9 @@ export default class Web3Provider extends Component {
 
   state = {
     web3: null,
+    contract: null,
     coinbase: null,
+    initialised: false,
     loading: true,
     error: null
   }
@@ -66,6 +68,7 @@ export default class Web3Provider extends Component {
         web3,
         contract: contractInstance,
         coinbase,
+        initialised: true,
         loading: false,
         error: null
       })

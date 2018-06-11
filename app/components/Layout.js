@@ -19,10 +19,11 @@ class Layout extends Component {
         requireNoAuth: PropTypes.bool
       })
     ).isRequired,
-    authenticed: PropTypes.bool.isRequired,
-    authenticating: PropTypes.bool.isRequired,
+    initialised: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error),
+    authenticed: PropTypes.bool.isRequired,
+    authenticating: PropTypes.bool.isRequired,
     children: PropTypes.node
   }
 
@@ -68,10 +69,19 @@ class Layout extends Component {
           </Container>
         </Menu>
         <Container text style={{ padding: '6rem 0 2rem' }}>
-          {this.props.error ? (
+          {this.props.error && (
             <Message negative>{this.props.error.message}</Message>
-          ) : this.props.loading ? (
+          )}
+          {this.props.loading ? (
             <Loader active>Connecting to MetaMask</Loader>
+          ) : !this.props.initialised ? (
+            <Container textAlign="center" style={{ padding: '4rem 0' }}>
+              Could not connect to{' '}
+              <a href="https://metamask.io/" target="_blank">
+                MetaMask
+              </a>{' '}
+              😭
+            </Container>
           ) : this.props.authenticating ? (
             <Loader active>Logging in</Loader>
           ) : (
@@ -84,7 +94,8 @@ class Layout extends Component {
 }
 
 export default withRouter(
-  withWeb3(({ loading, error }) => ({
+  withWeb3(({ initialised, loading, error }) => ({
+    initialised,
     loading,
     error
   }))(

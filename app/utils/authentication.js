@@ -38,7 +38,7 @@ export const requireAuth = WrappedComponent => {
         <BadVibesContext.Consumer>
           {({ state }) => {
             if (state.needAuth) {
-              return <Loader active>Initialising</Loader>
+              return <Loader active>Authenticating</Loader>
             }
 
             if (!state.username) {
@@ -63,7 +63,7 @@ export const requireNoAuth = WrappedComponent => {
         <BadVibesContext.Consumer>
           {({ state }) => {
             if (state.needAuth) {
-              return <Loader active>Initialising</Loader>
+              return <Loader active>Authenticating</Loader>
             }
 
             if (state.username) {

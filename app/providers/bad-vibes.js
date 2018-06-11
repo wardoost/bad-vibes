@@ -14,9 +14,9 @@ export const withBadVibes = connectContext(BadVibesContext)
 // Create provider which holds all state and actions
 class BadVibesProvider extends Component {
   static propTypes = {
-    web3: PropTypes.object,
-    contract: PropTypes.object,
     coinbase: PropTypes.string,
+    contract: PropTypes.object,
+    initialised: PropTypes.bool.isRequired,
     children: PropTypes.node
   }
 
@@ -28,7 +28,6 @@ class BadVibesProvider extends Component {
     addressUsername: '',
     total: 0,
     pageLimit: 10,
-    initialised: false,
     needAuth: false,
     authenticating: false,
     loading: false,
@@ -36,17 +35,15 @@ class BadVibesProvider extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const initialised = nextProps.web3 && nextProps.contract
-
     return {
       coinbase: nextProps.coinbase,
-      initialised,
-      needAuth: !initialised || nextProps.coinbase !== prevState.coinbase
+      needAuth:
+        !nextProps.initialised || nextProps.coinbase !== prevState.coinbase
     }
   }
 
   componentDidUpdate() {
-    if (this.state.initialised && this.state.needAuth) {
+    if (this.props.initialised && this.state.needAuth) {
       // Authenticate and hook up event listeners
       this.authenticate().then(() => {
         this.props.contract.LogNewPost((error, result) => {
@@ -80,12 +77,8 @@ class BadVibesProvider extends Component {
     })
 
     try {
-      if (!this.props.web3) {
-        throw new Error('Web3 is not initialised')
-      }
-
-      if (!this.props.contract) {
-        throw new Error('Contract is not initialised')
+      if (!this.props.initialised) {
+        throw new Error('Web3 or contract is not initialised')
       }
 
       // Try logging in with current wallet
@@ -119,13 +112,13 @@ class BadVibesProvider extends Component {
 
       this.setState({ loading: true })
 
-      if (!this.props.contract) {
-        throw new Error('Contract is not initialised')
+      if (!this.props.initialised) {
+        throw new Error('Web3 or contract is not initialised')
       }
 
       await validateUsername(username)
 
-      const { isUser, join } = this.state.contract
+      const { isUser, join } = this.props.contract
       const authenticated = await isUser(this.props.coinbase)
 
       if (authenticated) {
@@ -147,14 +140,13 @@ class BadVibesProvider extends Component {
         error: null
       }))
     } catch (error) {
-      console.log(error)
       this.setState({ error, loading: false })
     }
   }
 
   formatPost = async ([message, author]) => {
-    if (!this.props.contract) {
-      throw new Error('Contract is not initialised')
+    if (!this.props.initialised) {
+      throw new Error('Web3 or contract is not initialised')
     }
 
     const { isUser, getUsername } = this.props.contract
@@ -192,8 +184,8 @@ class BadVibesProvider extends Component {
 
       this.setState({ address, loading: true })
 
-      if (!this.props.contract) {
-        throw new Error('Contract is not initialised')
+      if (!this.props.initialised) {
+        throw new Error('Web3 or contract is not initialised')
       }
 
       const {
@@ -251,8 +243,8 @@ class BadVibesProvider extends Component {
 
       this.setState({ loading: true })
 
-      if (!this.props.contract) {
-        throw new Error('Contract is not initialised')
+      if (!this.props.initialised) {
+        throw new Error('Web3 or contract is not initialised')
       }
 
       const { getPostCount, getPostAtIndex } = this.props.contract
@@ -310,8 +302,8 @@ class BadVibesProvider extends Component {
 
       this.setState({ loading: true })
 
-      if (!this.props.contract) {
-        throw new Error('Contract is not initialised')
+      if (!this.props.initialised) {
+        throw new Error('Web3 or contract is not initialised')
       }
 
       await validateMessage(message)
@@ -363,8 +355,8 @@ class BadVibesProvider extends Component {
   }
 }
 
-export default withWeb3(({ web3, contract, coinbase }) => ({
-  web3,
+export default withWeb3(({ contract, coinbase, initialised }) => ({
   contract,
-  coinbase
+  coinbase,
+  initialised
 }))(BadVibesProvider)
