@@ -61,7 +61,7 @@ class CreatePost extends Component {
                 loading={this.props.loading}
                 disabled={!this.state.message}
                 size="big">
-                Post
+                Share
               </Button>
             </Input>
           </Form.Field>

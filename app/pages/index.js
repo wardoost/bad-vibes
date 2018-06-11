@@ -42,12 +42,20 @@ class Home extends Component {
           <CreatePost />
         ) : (
           <Message
-            icon="user"
+            icon={
+              <span
+                role="img"
+                aria-label="Join"
+                style={{ fontSize: '3rem', marginRight: '1rem' }}>
+                🤮
+              </span>
+            }
             onDismiss={this.handleDismiss}
             header={`You look like you're up to no good`}
             content={
               <p>
-                <Link to="/join">Join our community</Link> and share negativity
+                <Link to="/join">Join our community</Link> and share your
+                negative thoughts
               </p>
             }
           />

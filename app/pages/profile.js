@@ -41,8 +41,7 @@ class Profile extends Component {
         </h1>
         <Timeline posts={this.props.posts} />
         <div style={{ textAlign: 'center' }}>
-          {!this.props.posts.length ||
-          this.props.posts.length < this.props.total ? (
+          {this.props.posts.length < this.props.total ? (
             <Button
               onClick={() => this.props.loadMorePosts()}
               loading={this.props.loading}>
@@ -51,9 +50,13 @@ class Profile extends Component {
           ) : (
             <Fragment>
               <p style={{ margin: '4rem 0 1rem' }}>
-                Why are you reading your own messed up posts? Post more 👎 shit.
+                {this.props.posts.length
+                  ? 'Why are you reading your own messed up posts?'
+                  : `You don't have any 💩 to say?`}
               </p>
-              <CreatePost placeholder="Post more shitty things" />
+              {!this.props.posts.length && (
+                <CreatePost placeholder={'Share a shitty thing'} />
+              )}
             </Fragment>
           )}
         </div>
