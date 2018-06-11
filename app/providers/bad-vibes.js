@@ -1,0 +1,358 @@
+import React, { Component, createContext } from 'react'
+import PropTypes from 'prop-types'
+import contract from 'truffle-contract'
+
+import { connectContext } from '../utils/react-helpers'
+import { validateMessage, validateUsername } from '../utils/validation'
+import { withWeb3 } from './web3'
+import BadVibesContract from '../../build/contracts/BadVibes.json'
+
+// Create context with React Context API
+export const BadVibesContext = createContext()
+
+// Export HOC to connect state and actions to any child component
+export const withBadVibes = connectContext(BadVibesContext)
+
+// Create provider which holds all state and actions
+class BadVibesProvider extends Component {
+  static propTypes = {
+    web3: PropTypes.object,
+    coinbase: PropTypes.string,
+    children: PropTypes.node
+  }
+
+  state = {
+    username: '',
+    contractInstance: null,
+    posts: [],
+    address: null,
+    addressUsername: '',
+    total: 0,
+    pageLimit: 10,
+    authenticating: false,
+    loading: false,
+    error: null
+  }
+
+  componentDidUpdate() {
+    if (
+      !this.state.contractInstance &&
+      this.props.web3 &&
+      !this.state.authenticating
+    ) {
+      this.initialise()
+    }
+  }
+
+  initialise = async () => {
+    this.setState({ authenticating: true })
+
+    try {
+      if (!this.props.web3) {
+        throw new Error('Web3 is not initialised')
+      }
+
+      const posts = contract(BadVibesContract)
+      posts.setProvider(this.props.web3.currentProvider)
+      const contractInstance = await posts.deployed()
+
+      // Hook up event listeners
+      contractInstance.LogNewPost((error, result) => {
+        console.log('LogNewPost', this.state, error || result)
+
+        if (!this.state.loading) {
+          if (result) {
+            const { message, author, index } = result.args
+
+            this.setState(prevState => ({
+              count: index.toNumber() + 1,
+              posts: [
+                {
+                  message,
+                  author
+                },
+                ...prevState.posts
+              ]
+            }))
+          } else if (error) {
+            this.setState({ error })
+          }
+        }
+      })
+
+      // Try logging in with current wallet
+      const authenticated = await contractInstance.isUser(this.props.coinbase)
+
+      if (authenticated) {
+        const username = await contractInstance.getUsername(this.props.coinbase)
+
+        this.setState({
+          username,
+          contractInstance,
+          authenticating: false,
+          error: null
+        })
+      } else {
+        this.setState({ contractInstance, authenticating: false, error: null })
+      }
+    } catch (error) {
+      this.setState({ error, authenticating: false })
+    }
+  }
+
+  join = async username => {
+    try {
+      if (this.state.loading) {
+        throw new Error('Already loading data')
+      }
+
+      this.setState({ loading: true })
+
+      if (!this.state.contractInstance) {
+        throw new Error('Contract is not initialised')
+      }
+
+      await validateUsername(username)
+
+      const { isUser, join } = this.state.contractInstance
+      const authenticated = await isUser(this.props.coinbase)
+
+      if (authenticated) {
+        throw new Error('You are already a member')
+      }
+
+      const result = await join(username, {
+        from: this.props.coinbase
+      })
+      console.log(result)
+
+      this.setState(prevState => ({
+        username,
+        users: {
+          ...prevState.users,
+          [this.props.coinbase]: username
+        },
+        loading: false,
+        error: null
+      }))
+    } catch (error) {
+      console.log(error)
+      this.setState({ error, loading: false })
+    }
+  }
+
+  formatPost = async ([message, author]) => {
+    if (!this.state.contractInstance) {
+      throw new Error('Contract is not initialised')
+    }
+
+    const { isUser, getUsername } = this.state.contractInstance
+    const authenticated = await isUser(author)
+
+    if (!authenticated) {
+      return {
+        message,
+        author
+      }
+    }
+
+    const username = await getUsername(author)
+
+    return {
+      message,
+      author,
+      authorUsername: username
+    }
+  }
+
+  loadMyPosts = async (page = 1) => {
+    try {
+      if (this.state.loading) {
+        throw new Error('Already loading data')
+      }
+
+      this.setState({ loading: true })
+
+      if (!this.state.contractInstance) {
+        throw new Error('Contract is not initialised')
+      }
+
+      this.loadUserPosts(this.props.coinbase, page)
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
+  }
+
+  loadUserPosts = async (address, page = 1, limit = this.state.pageLimit) => {
+    try {
+      if (this.state.loading) {
+        throw new Error('Already loading data')
+      }
+
+      this.setState({ address, loading: true })
+
+      if (!this.state.contractInstance) {
+        throw new Error('Contract is not initialised')
+      }
+
+      const {
+        isUser,
+        getUsername,
+        getPostAtIndex,
+        getPostOfUserCount,
+        getPostOfUserAtIndex
+      } = this.state.contractInstance
+
+      const postPromises = []
+
+      const count = await getPostOfUserCount(address)
+      const total = count.toNumber()
+      const start = Math.max(total - 1 - (page - 1) * limit, 0)
+      const end = Math.max(start - (limit - 1), 0)
+
+      for (let i = start; i >= end; i--) {
+        postPromises.push(
+          getPostOfUserAtIndex(address, i).then(postIndex =>
+            getPostAtIndex(postIndex).then(this.formatPost)
+          )
+        )
+      }
+
+      const posts = await Promise.all(postPromises)
+
+      let addressUsername = ''
+      const authenticated = await isUser(address)
+
+      if (authenticated) {
+        addressUsername = await getUsername(address)
+      }
+
+      this.setState(prevState => ({
+        total,
+        pageLimit: limit,
+        posts: [...prevState.posts, ...posts],
+        addressUsername,
+        loading: false,
+        error: null
+      }))
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
+  }
+
+  loadAllPosts = async (page = 1, limit = this.state.pageLimit) => {
+    try {
+      if (this.state.loading) {
+        throw new Error('Already loading data')
+      }
+
+      this.setState({ loading: true })
+
+      if (!this.state.contractInstance) {
+        throw new Error('Contract is not initialised')
+      }
+
+      const { getPostCount, getPostAtIndex } = this.state.contractInstance
+      const postPromises = []
+      const count = await getPostCount()
+      const total = count.toNumber()
+
+      if (total) {
+        const start = Math.max(total - 1 - (page - 1) * limit, 0)
+        const end = Math.max(start - (limit - 1), 0)
+
+        for (let i = start; i >= end; i--) {
+          postPromises.push(getPostAtIndex(i).then(this.formatPost))
+        }
+      }
+
+      const posts = await Promise.all(postPromises)
+
+      this.setState(prevState => ({
+        total,
+        pageLimit: limit,
+        posts: [...prevState.posts, ...posts],
+        loading: false,
+        error: null
+      }))
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
+  }
+
+  loadMorePosts = () => {
+    if (
+      this.state.posts.length &&
+      this.state.posts.length >= this.state.total
+    ) {
+      this.setState({
+        error: new Error('All posts already loaded')
+      })
+    } else {
+      const page = this.state.posts.length / this.state.pageLimit + 1
+
+      if (this.state.address) {
+        this.loadUserPosts(this.state.address, page)
+      } else {
+        this.loadAllPosts(page)
+      }
+    }
+  }
+
+  createPost = async message => {
+    this.setState({ error: null, loading: true })
+
+    try {
+      await validateMessage(message)
+
+      const { createPost } = this.state.contractInstance
+      const result = await createPost(message, {
+        from: this.props.coinbase
+      })
+
+      this.setState({
+        loading: false,
+        error: null
+      })
+
+      return result
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
+  }
+
+  resetPosts = () => {
+    this.setState({
+      address: null,
+      addressUsername: '',
+      total: 0,
+      posts: [],
+      error: null
+    })
+  }
+
+  render() {
+    return (
+      <BadVibesContext.Provider
+        value={{
+          state: this.state,
+          actions: {
+            join: this.join,
+            loadAllPosts: this.loadAllPosts,
+            loadMyPosts: this.loadMyPosts,
+            loadUserPosts: this.loadUserPosts,
+            loadMorePosts: this.loadMorePosts,
+            createPost: this.createPost,
+            resetPosts: this.resetPosts
+          }
+        }}>
+        {this.props.children}
+      </BadVibesContext.Provider>
+    )
+  }
+}
+
+export default withWeb3(({ web3, coinbase }) => ({
+  web3,
+  coinbase
+}))(BadVibesProvider)
