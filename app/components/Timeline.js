@@ -34,11 +34,9 @@ const Timeline = ({ coinbase, posts }) => (
           </Feed.Label>
           <Feed.Content>
             <Feed.Summary>{message}</Feed.Summary>
-            {author && (
-              <Feed.Meta as={Link} to={authorUrl}>
-                by {coinbase === author ? 'you' : authorUsername || author}
-              </Feed.Meta>
-            )}
+            <Feed.Meta as={Link} to={authorUrl}>
+              by <b>{coinbase === author ? 'you' : authorUsername || author}</b>
+            </Feed.Meta>
           </Feed.Content>
         </Feed.Event>
       )

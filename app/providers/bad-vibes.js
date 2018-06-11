@@ -66,13 +66,10 @@ class BadVibesProvider extends Component {
 
             this.setState(prevState => ({
               count: index.toNumber() + 1,
-              posts: [
-                {
-                  message,
-                  author
-                },
-                ...prevState.posts
-              ]
+              posts:
+                prevState.address && author !== prevState.address
+                  ? prevState.posts
+                  : [{ message, author }, ...prevState.posts]
             }))
           } else if (error) {
             this.setState({ error })
@@ -204,18 +201,20 @@ class BadVibesProvider extends Component {
       } = this.state.contractInstance
 
       const postPromises = []
-
       const count = await getPostOfUserCount(address)
       const total = count.toNumber()
-      const start = Math.max(total - 1 - (page - 1) * limit, 0)
-      const end = Math.max(start - (limit - 1), 0)
 
-      for (let i = start; i >= end; i--) {
-        postPromises.push(
-          getPostOfUserAtIndex(address, i).then(postIndex =>
-            getPostAtIndex(postIndex).then(this.formatPost)
+      if (total) {
+        const start = Math.max(total - 1 - (page - 1) * limit, 0)
+        const end = Math.max(start - (limit - 1), 0)
+
+        for (let i = start; i >= end; i--) {
+          postPromises.push(
+            getPostOfUserAtIndex(address, i).then(postIndex =>
+              getPostAtIndex(postIndex).then(this.formatPost)
+            )
           )
-        )
+        }
       }
 
       const posts = await Promise.all(postPromises)
