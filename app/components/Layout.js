@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import { Container, Menu, Message, Loader } from 'semantic-ui-react'
@@ -55,7 +55,7 @@ class Layout extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Menu fixed="top" inverted style={{ height: '4rem' }}>
           <Container>
             <Menu.Item as={Link} to="/" header>
@@ -88,7 +88,7 @@ class Layout extends Component {
             this.props.children
           )}
         </Container>
-      </div>
+      </Fragment>
     )
   }
 }

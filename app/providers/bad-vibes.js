@@ -47,7 +47,7 @@ class BadVibesProvider extends Component {
       // Authenticate and hook up event listeners
       this.authenticate().then(() => {
         this.props.contract.LogNewPost((error, result) => {
-          console.log('LogNewPost', this.state, error || result)
+          console.log('LogNewPost', error || result)
 
           if (!this.state.loading) {
             if (result) {

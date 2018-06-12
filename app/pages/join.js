@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Message, Input, Button } from 'semantic-ui-react'
+import { Header, Form, Message, Input, Button } from 'semantic-ui-react'
 
 import { withBadVibes } from '../providers/bad-vibes'
 
@@ -25,10 +25,10 @@ class Join extends Component {
         {this.props.error && (
           <Message negative>{this.props.error.message}</Message>
         )}
-        <h1>
+        <Header>
           Choose your shitty username wisely, you won't be able to change it
           anymore
-        </h1>
+        </Header>
         <Form>
           <Form.Field>
             <Input

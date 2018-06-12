@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { Header } from 'semantic-ui-react'
 
 export default class Error extends Component {
   render() {
-    return <h1>Page not found</h1>
+    return <Header>Page not found</Header>
   }
 }

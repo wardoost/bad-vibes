@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
-import { Message, Button } from 'semantic-ui-react'
+import { Header, Container, Message, Button } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
 import { withBadVibes } from '../providers/bad-vibes'
@@ -49,21 +49,20 @@ class User extends Component {
         {this.props.error && (
           <Message negative>{this.props.error.message}</Message>
         )}
-        <h1>
+        <Header>
           {this.props.total} messages by{' '}
           {this.props.authorUsername || this.props.match.params.address}
-        </h1>
+        </Header>
         <Timeline posts={this.props.posts} />
-        <div style={{ textAlign: 'center' }}>
-          {!this.props.posts.length ||
-          this.props.posts.length < this.props.total ? (
+        <Container textAlign="center">
+          {this.props.posts.length < this.props.total && (
             <Button
               onClick={() => this.props.loadMorePosts()}
               loading={this.props.loading}>
               More
             </Button>
-          ) : null}
-        </div>
+          )}
+        </Container>
       </Fragment>
     )
   }

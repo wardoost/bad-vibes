@@ -69,7 +69,7 @@ class Home extends Component {
               More
             </Button>
           ) : (
-            <p style={{ margin: '4rem 0', textAlign: 'center' }}>
+            <p style={{ margin: '4rem 0' }}>
               You have seen all {this.props.total} posts, so 🖕 off now!
             </p>
           )}

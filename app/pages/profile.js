@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Message, Button } from 'semantic-ui-react'
+import { Container, Header, Message, Button } from 'semantic-ui-react'
 
 import { withBadVibes } from '../providers/bad-vibes'
 import CreatePost from '../components/CreatePost'
@@ -36,11 +36,11 @@ class Profile extends Component {
         {this.props.error && (
           <Message negative>{this.props.error.message}</Message>
         )}
-        <h1>
+        <Header>
           {this.props.username}, you have posted {this.props.total} times
-        </h1>
+        </Header>
         <Timeline posts={this.props.posts} />
-        <div style={{ textAlign: 'center' }}>
+        <Container textAlign="center">
           {this.props.posts.length < this.props.total ? (
             <Button
               onClick={() => this.props.loadMorePosts()}
@@ -59,7 +59,7 @@ class Profile extends Component {
               )}
             </Fragment>
           )}
-        </div>
+        </Container>
       </Fragment>
     )
   }

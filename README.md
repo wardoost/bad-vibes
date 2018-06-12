@@ -1,5 +1,7 @@
 # Bad Vibes
 
+A decentralised social network where we only allow offensive and negative content.
+
 ## Setup
 
 ```
