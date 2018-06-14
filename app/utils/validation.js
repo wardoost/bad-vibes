@@ -3,7 +3,6 @@ const getSentiment = async string => {
     throw new Error(`String is empty`)
   }
 
-  const apiKey = 'AIzaSyB86vmB_8skK14b6NKfzg9DtG--VxNDN6Y'
   const response = await fetch(
     `https://language.googleapis.com/v1/documents:analyzeSentiment?key=${
       process.env.GOOGLE_API_KEY
