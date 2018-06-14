@@ -5,7 +5,9 @@ const getSentiment = async string => {
 
   const apiKey = 'AIzaSyB86vmB_8skK14b6NKfzg9DtG--VxNDN6Y'
   const response = await fetch(
-    `https://language.googleapis.com/v1/documents:analyzeSentiment?key=${apiKey}`,
+    `https://language.googleapis.com/v1/documents:analyzeSentiment?key=${
+      process.env.GOOGLE_API_KEY
+    }`,
     {
       method: 'POST',
       body: JSON.stringify({

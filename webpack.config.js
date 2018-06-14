@@ -3,6 +3,7 @@ const { resolve, join } = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 const WebpackMd5Hash = require('webpack-md5-hash')
 
 const root = resolve(__dirname)
@@ -37,7 +38,11 @@ module.exports = {
         from: 'static',
         to: './'
       }
-    ])
+    ]),
+    new Dotenv({
+      path: join(root, '.env'),
+      safe: true
+    })
   ].concat(
     process.env.NODE_ENV === 'production'
       ? [
