@@ -34,17 +34,17 @@ The main content feed is a stream of all messages ever posted on the platform. Y
 
 In the future we might add a voting system that can change the way the smart contract approves content. This could lead to the platform only allowing mildly negative or even positive content!
 
-## Testing
+## Beta Testing
 
 A beta version is running on [IPFS](https://ipfs.io/) and the [Ropsten testnet](https://ropsten.etherscan.io/address/0xe4ab0ef28faf00d79e1cc49fbc5e4eb316f067bf): https://ipfs.io/ipfs/QmeMkcHQxwWRue4k1zHQ4es8i8yufvt9CqT31XzBBaH6TY
+
+Read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-rosten-test-eth-request-guide-3fddf2c3df52) if you need guidance using MeteMask on the Ropsten testnet.
 
 ## Development
 
 ### Setup
 
-You will need to install [Node.js](https://nodejs.org/) and [Truffle](http://truffleframework.com/). Clone this repo and `cd` to the project directory in your command line.
-
-Install dependencies with [npm](https://www.npmjs.com/)
+You will need to install [Node.js](https://nodejs.org/) and [Truffle](http://truffleframework.com/). Clone this repo and `cd` to the project directory in your command line. Start by installing JS dependencies with [npm](https://www.npmjs.com/)
 
 ```
 npm install
@@ -62,13 +62,13 @@ Compile and deploy the smart contract
 truffle compile && truffle migrate
 ```
 
-Create a `.env` file in the root of the project and follow the example file `.env.example` with your environment variables. Start a development server for the frontend application using [Webpack](https://webpack.js.org/) dev server
+Create a `.env` file in the root of the project and add your environment variables by following the example file `.env.example`. Start a development server for the frontend application using [Webpack](https://webpack.js.org/) dev server
 
 ```
 npm start
 ```
 
-You can create create a production build of the app with the following command
+You can create a production build of the app with the following command
 
 ```
 npm run build
