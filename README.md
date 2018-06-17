@@ -1,7 +1,7 @@
 # Bad Vibes
 
-![Version - 0.0.1](https://img.shields.io/badge/Version-0.0.1-brightgreen.svg)
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/Code_Style-standard-brightgreen.svg)](https://standardjs.com)
+![Version - 0.0.1](https://img.shields.io/badge/version-0.0.1-brightgreen.svg)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Code Style - Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ## Summary
