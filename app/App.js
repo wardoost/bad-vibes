@@ -18,11 +18,20 @@ import {
 } from './utils/authentication'
 
 class App extends Component {
+  getBaseName() {
+    if (window.location.origin === 'https://ipfs.io') {
+      const ipfsHash = window.location.pathname.split('/')[2]
+      return `/ipfs/${ipfsHash}`
+    }
+
+    return '/'
+  }
+
   render() {
     return (
       <Web3Provider contract={BadVibesContract}>
         <BadVibesProvider>
-          <Router>
+          <Router basename={this.getBaseName()}>
             <Layout>
               <Switch>
                 <Route path="/" exact component={requireInitialised(Home)} />

@@ -30,6 +30,10 @@ The main content feed is a stream of all messages ever posted on the platform. Y
 
 In the future we might add a voting system that can change the way the smart contract approves content. This could lead to the platform only allowing mildly negative or even positive content!
 
+## Testing
+
+A beta version is running on [IPFS](https://ipfs.io/) and the [Ropsten testnet](https://ropsten.etherscan.io/address/0xe4ab0ef28faf00d79e1cc49fbc5e4eb316f067bf): https://ipfs.io/ipfs/QmeMkcHQxwWRue4k1zHQ4es8i8yufvt9CqT31XzBBaH6TY
+
 ## Development
 
 ### Setup
