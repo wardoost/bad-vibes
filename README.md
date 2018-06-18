@@ -42,8 +42,6 @@ Read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-ros
 
 ## Development
 
-### Setup
-
 You will need to install [Node.js](https://nodejs.org/) and [Truffle](http://truffleframework.com/). Clone this repo and `cd` to the project directory in your command line. Start by installing JS dependencies with [npm](https://www.npmjs.com/)
 
 ```
@@ -68,8 +66,22 @@ Create a `.env` file in the root of the project and add your environment variabl
 npm start
 ```
 
-You can create a production build of the app with the following command
+## Deployment
+
+Start up a geth client that is synced with the Ropsten blockchain following [this guide](https://medium.com/@guccimanepunk/how-to-deploy-a-truffle-contract-to-ropsten-e2fb817870c1). Make sure your Ropsten account has a little bit of ether which you can get for free at the [MetaMask Ether Faucet](https://faucet.metamask.io/) and run
+
+```
+truffle migrate --network ropsten
+```
+
+After the contract is succesfully deployed you can create a production build of the app with the build command
 
 ```
 npm run build
+```
+
+Install [IPFS](https://ipfs.io/docs/install/) and upload this build to IPFS using
+
+```
+ipfs add -r ./build/app
 ```
