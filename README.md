@@ -1,4 +1,4 @@
-# Bad Vibes
+# 🖕 Bad Vibes
 
 ![Version - 0.0.1](https://img.shields.io/badge/version-0.0.1-brightgreen.svg)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
@@ -38,31 +38,31 @@ In the future we might add a voting system that can change the way the smart con
 
 A beta version is running on [IPFS](https://ipfs.io/) and the [Ropsten testnet](https://ropsten.etherscan.io/address/0xe4ab0ef28faf00d79e1cc49fbc5e4eb316f067bf): https://ipfs.io/ipfs/QmeMkcHQxwWRue4k1zHQ4es8i8yufvt9CqT31XzBBaH6TY
 
-Read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-rosten-test-eth-request-guide-3fddf2c3df52) if you need guidance using MeteMask on the Ropsten testnet.
+Read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-rosten-test-eth-request-guide-3fddf2c3df52) if you need guidance using MetaMask on the Ropsten testnet.
 
 ## Development
 
 You will need to install [Node.js](https://nodejs.org/) and [Truffle](http://truffleframework.com/). Clone this repo and `cd` to the project directory in your command line. Start by installing JS dependencies with [npm](https://www.npmjs.com/)
 
-```
+```bash
 npm install
 ```
 
 Start a development blockchain using Truffle
 
-```
+```bash
 truffle develop
 ```
 
 Compile and deploy the smart contract
 
-```
+```bash
 truffle compile && truffle migrate
 ```
 
 Create a `.env` file in the root of the project and add your environment variables by following the example file `.env.example`. Start a development server for the frontend application using [Webpack](https://webpack.js.org/) dev server
 
-```
+```bash
 npm start
 ```
 
@@ -70,18 +70,18 @@ npm start
 
 Start up a geth client that is synced with the Ropsten blockchain following [this guide](https://medium.com/@guccimanepunk/how-to-deploy-a-truffle-contract-to-ropsten-e2fb817870c1). Make sure your Ropsten account has a little bit of ether which you can get for free at the [MetaMask Ether Faucet](https://faucet.metamask.io/) and run
 
-```
+```bash
 truffle migrate --network ropsten
 ```
 
 After the contract is succesfully deployed you can create a production build of the app with the build command
 
-```
+```bash
 npm run build
 ```
 
 Install [IPFS](https://ipfs.io/docs/install/) and upload this build to IPFS using
 
-```
+```bash
 ipfs add -r ./build/app
 ```
