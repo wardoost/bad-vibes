@@ -32,18 +32,16 @@ class App extends Component {
       <Web3Provider contract={BadVibesContract}>
         <BadVibesProvider>
           <Router basename={this.getBaseName()}>
-            <Layout>
-              <Switch>
-                <Route path="/" exact component={requireInitialised(Home)} />
-                <Route path="/join" component={requireNoAuth(Join)} />
-                <Route path="/profile" component={requireAuth(Profile)} />
-                <Route
-                  path="/users/:address"
-                  component={requireInitialised(User)}
-                />
-                <Route component={Error} />
-              </Switch>
-            </Layout>
+            <Switch>
+              <Route path="/" exact component={requireInitialised(Home)} />
+              <Route path="/join" component={requireNoAuth(Join)} />
+              <Route path="/profile" component={requireAuth(Profile)} />
+              <Route
+                path="/users/:address"
+                component={requireInitialised(User)}
+              />
+              <Route component={Error} />
+            </Switch>
           </Router>
         </BadVibesProvider>
       </Web3Provider>

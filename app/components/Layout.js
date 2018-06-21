@@ -34,6 +34,26 @@ class Layout extends Component {
     ]
   }
 
+  static Header = ({ style, children }) => (
+    <header
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '20vh',
+        backgroundColor: '#f6f6f6',
+        ...style
+      }}>
+      <Container>{children}</Container>
+    </header>
+  )
+
+  static Content = ({ style, children }) => (
+    <Container style={{ padding: '2rem 0', ...style }} as="main">
+      {children}
+    </Container>
+  )
+
   renderMenuItem = ({ label, path, requireAuth, requireNoAuth }, index) => {
     if (
       (requireAuth && !this.props.authenticed) ||
@@ -68,11 +88,10 @@ class Layout extends Component {
             </Menu.Menu>
           </Container>
         </Menu>
-        <Container text style={{ padding: '6rem 0 2rem' }}>
-          {this.props.error && (
+        <div style={{ padding: '4rem 0 0' }}>
+          {this.props.error ? (
             <Message negative>{this.props.error.message}</Message>
-          )}
-          {this.props.loading ? (
+          ) : this.props.loading ? (
             <Loader active>Connecting to MetaMask</Loader>
           ) : !this.props.initialised ? (
             <Container textAlign="center" style={{ padding: '4rem 0' }}>
@@ -87,7 +106,7 @@ class Layout extends Component {
           ) : (
             this.props.children
           )}
-        </Container>
+        </div>
       </Fragment>
     )
   }

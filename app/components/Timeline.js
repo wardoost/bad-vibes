@@ -9,11 +9,16 @@ import { getEmojiFromAddress } from '../utils/web3-helpers'
 const Timeline = ({ coinbase, posts }) => (
   <Feed size="large">
     {posts.map(({ message, author, authorUsername }, index) => {
-      const authorUrl = coinbase === author ? '/profile' : `/users/${author}`
+      const authorLink = {
+        pathname: coinbase === author ? '/profile' : `/users/${author}`,
+        state: {
+          authorUsername
+        }
+      }
 
       return (
         <Feed.Event key={index}>
-          <Feed.Label as={Link} to={authorUrl}>
+          <Feed.Label as={Link} to={authorLink}>
             <div
               style={{
                 width: '3rem',
@@ -27,14 +32,14 @@ const Timeline = ({ coinbase, posts }) => (
               <span
                 role="img"
                 aria-label="User"
-                style={{ fontSize: '1.6rem', height: '2.2rem' }}>
+                style={{ fontSize: '1.6rem', height: '1.2rem' }}>
                 {getEmojiFromAddress(author)}
               </span>
             </div>
           </Feed.Label>
           <Feed.Content>
             <Feed.Summary>{message}</Feed.Summary>
-            <Feed.Meta as={Link} to={authorUrl}>
+            <Feed.Meta as={Link} to={authorLink}>
               by <b>{coinbase === author ? 'you' : authorUsername || author}</b>
             </Feed.Meta>
           </Feed.Content>

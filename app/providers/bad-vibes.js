@@ -27,7 +27,7 @@ class BadVibesProvider extends Component {
     address: null,
     addressUsername: '',
     total: 0,
-    pageLimit: 5,
+    pageLimit: 10,
     needAuth: false,
     authenticating: false,
     loading: false,

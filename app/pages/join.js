@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Header, Form, Message, Input, Button } from 'semantic-ui-react'
 
 import { withBadVibes } from '../providers/bad-vibes'
+import Layout from '../components/Layout'
 
 class Join extends Component {
   static propTypes = {
@@ -21,37 +22,41 @@ class Join extends Component {
 
   render() {
     return (
-      <Fragment>
-        {this.props.error && (
-          <Message negative>{this.props.error.message}</Message>
-        )}
-        <Header>
-          Choose your shitty username wisely, you won't be able to change it
-          anymore
-        </Header>
-        <Form>
-          <Form.Field>
-            <Input
-              placeholder="Your shitty username"
-              value={this.state.username}
-              onChange={evt => this.setState({ username: evt.target.value })}
-              error={Boolean(this.props.error)}
-              size="big"
-              action
-              fluid>
-              <input />
-              <Button
-                type="submit"
-                onClick={this.join}
-                disabled={!this.state.username}
-                loading={this.props.loading}
-                size="big">
-                Join
-              </Button>
-            </Input>
-          </Form.Field>
-        </Form>
-      </Fragment>
+      <Layout>
+        <Layout.Header>
+          <Header as="h1">
+            Choose your shitty username wisely, you won't be able to change it
+            anymore
+          </Header>
+        </Layout.Header>
+        <Layout.Content>
+          {this.props.error && (
+            <Message negative>{this.props.error.message}</Message>
+          )}
+          <Form>
+            <Form.Field>
+              <Input
+                placeholder="Your shitty username"
+                value={this.state.username}
+                onChange={evt => this.setState({ username: evt.target.value })}
+                error={Boolean(this.props.error)}
+                size="big"
+                action
+                fluid>
+                <input />
+                <Button
+                  type="submit"
+                  onClick={this.join}
+                  disabled={!this.state.username}
+                  loading={this.props.loading}
+                  size="big">
+                  Join
+                </Button>
+              </Input>
+            </Form.Field>
+          </Form>
+        </Layout.Content>
+      </Layout>
     )
   }
 }
