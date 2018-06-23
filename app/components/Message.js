@@ -40,6 +40,8 @@ export default class Message extends Component {
             }, [])
       }
     }
+
+    return null
   }
 
   render() {

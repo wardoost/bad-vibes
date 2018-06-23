@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import { Container, Menu, Message, Loader } from 'semantic-ui-react'
+import { Container, Menu, Message, Loader, Icon } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
 import { withBadVibes } from '../providers/bad-vibes'
@@ -13,8 +13,8 @@ class Layout extends Component {
     }).isRequired,
     menu: PropTypes.arrayOf(
       PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
+        label: PropTypes.string,
+        url: PropTypes.string.isRequired,
         requireAuth: PropTypes.bool,
         requireNoAuth: PropTypes.bool
       })
@@ -29,8 +29,14 @@ class Layout extends Component {
 
   static defaultProps = {
     menu: [
-      { label: 'My Profile', path: '/profile', requireAuth: true },
-      { label: 'Join', path: '/join', requireNoAuth: true }
+      { label: 'My Profile', url: '/profile', requireAuth: true },
+      { label: 'Join', url: '/join', requireNoAuth: true },
+      {
+        label: 'Wtf?',
+        icon: PropTypes.string,
+        url: 'https://github.com/wardoost/bad-vibes#why',
+        external: true
+      }
     ]
   }
 
@@ -54,7 +60,10 @@ class Layout extends Component {
     </Container>
   )
 
-  renderMenuItem = ({ label, path, requireAuth, requireNoAuth }, index) => {
+  renderMenuItem = (
+    { label, url, requireAuth, requireNoAuth, external },
+    index
+  ) => {
     if (
       (requireAuth && !this.props.authenticed) ||
       (requireNoAuth && this.props.authenticed)
@@ -62,12 +71,20 @@ class Layout extends Component {
       return null
     }
 
+    if (external) {
+      return (
+        <Menu.Item key={index} href={url}>
+          {label}
+        </Menu.Item>
+      )
+    }
+
     return (
       <Menu.Item
         key={index}
         as={Link}
-        to={path}
-        active={path === this.props.location.pathname}>
+        to={url}
+        active={url === this.props.location.pathname}>
         {label}
       </Menu.Item>
     )
@@ -88,10 +105,11 @@ class Layout extends Component {
             </Menu.Menu>
           </Container>
         </Menu>
-        <div style={{ padding: '4rem 0 0' }}>
-          {this.props.error ? (
+        <div style={{ padding: '4rem 0 0', minHeight: 'calc(100% - 4rem)' }}>
+          {this.props.error && (
             <Message negative>{this.props.error.message}</Message>
-          ) : this.props.loading ? (
+          )}
+          {this.props.loading ? (
             <Loader active>Connecting to MetaMask</Loader>
           ) : !this.props.initialised ? (
             <Container textAlign="center" style={{ padding: '4rem 0' }}>
@@ -107,6 +125,24 @@ class Layout extends Component {
             this.props.children
           )}
         </div>
+        <footer
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            height: '4rem',
+            backgroundColor: '#f6f6f6'
+          }}>
+          <Container>
+            <a
+              href="https://github.com/wardoost/bad-vibes/issues/new"
+              target="_blank"
+              style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,.87)' }}>
+              <Icon name="bug" />
+              Report an issue
+            </a>
+          </Container>
+        </footer>
       </Fragment>
     )
   }
