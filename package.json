@@ -1,6 +1,6 @@
 {
   "name": "bad-vibes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "@material-ui/core": "^1.2.0",
     "babel-polyfill": "^6.26.0",
