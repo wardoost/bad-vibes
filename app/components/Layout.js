@@ -73,7 +73,7 @@ class Layout extends Component {
 
     if (external) {
       return (
-        <Menu.Item key={index} href={url}>
+        <Menu.Item key={index} href={url} target="_blank">
           {label}
         </Menu.Item>
       )
