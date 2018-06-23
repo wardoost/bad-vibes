@@ -5,6 +5,7 @@ import { Feed } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
 import { getEmojiFromAddress } from '../utils/web3-helpers'
+import Message from './Message'
 
 const Timeline = ({ coinbase, posts }) => (
   <Feed size="large">
@@ -38,7 +39,9 @@ const Timeline = ({ coinbase, posts }) => (
             </div>
           </Feed.Label>
           <Feed.Content>
-            <Feed.Summary>{message}</Feed.Summary>
+            <Feed.Summary>
+              <Message message={message} />
+            </Feed.Summary>
             <Feed.Meta as={Link} to={authorLink}>
               by <b>{coinbase === author ? 'you' : authorUsername || author}</b>
             </Feed.Meta>
