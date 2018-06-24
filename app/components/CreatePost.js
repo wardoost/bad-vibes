@@ -49,7 +49,9 @@ class CreatePost extends Component {
             <Input
               placeholder={this.props.placeholder}
               value={this.state.message}
-              onChange={evt => this.setState({ message: evt.target.value })}
+              onChange={evt =>
+                this.setState({ message: evt.target.value, error: null })
+              }
               error={Boolean(this.props.error || this.state.error)}
               size="big"
               action
