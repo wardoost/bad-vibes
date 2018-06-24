@@ -20,6 +20,7 @@ export const getEmojiFromAddress = address => {
   const emojis = [
     '👿',
     '👹',
+    '😢',
     '😈',
     '💩',
     '🖕',
@@ -28,10 +29,18 @@ export const getEmojiFromAddress = address => {
     '😵',
     '🤬',
     '😠',
+    '😭',
     '😡',
     '😖',
     '👺',
-    '🌧'
+    '🌧',
+    '🥀',
+    '👎',
+    '🤮',
+    '🙅‍',
+    '🍂',
+    '😿',
+    '💔'
   ]
 
   return emojis[parseInt(address) % emojis.length]
