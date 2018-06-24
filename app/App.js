@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 import { hot } from 'react-hot-loader'
 
 import Web3Provider from './providers/web3'
@@ -9,7 +9,6 @@ import Join from './pages/join'
 import Profile from './pages/profile'
 import User from './pages/user'
 import Error from './pages/error'
-import Layout from './components/Layout'
 import BadVibesContract from '../build/contracts/BadVibes.json'
 import {
   requireInitialised,
@@ -18,20 +17,11 @@ import {
 } from './utils/authentication'
 
 class App extends Component {
-  getBaseName() {
-    if (window.location.origin === 'https://ipfs.io') {
-      const ipfsHash = window.location.pathname.split('/')[2]
-      return `/ipfs/${ipfsHash}`
-    }
-
-    return '/'
-  }
-
   render() {
     return (
       <Web3Provider contract={BadVibesContract}>
         <BadVibesProvider>
-          <Router basename={this.getBaseName()}>
+          <HashRouter>
             <Switch>
               <Route path="/" exact component={requireInitialised(Home)} />
               <Route path="/join" component={requireNoAuth(Join)} />
@@ -42,7 +32,7 @@ class App extends Component {
               />
               <Route component={Error} />
             </Switch>
-          </Router>
+          </HashRouter>
         </BadVibesProvider>
       </Web3Provider>
     )
