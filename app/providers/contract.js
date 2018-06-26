@@ -6,13 +6,13 @@ import { validateMessage, validateUsername } from '../utils/validation'
 import { withWeb3 } from './web3'
 
 // Create context with React Context API
-export const BadVibesContext = createContext()
+export const ContractContext = createContext()
 
 // Export HOC to connect state and actions to any child component
-export const withBadVibes = connectContext(BadVibesContext)
+export const withContract = connectContext(ContractContext)
 
 // Create provider which holds all state and actions
-class BadVibesProvider extends Component {
+class ContractProvider extends Component {
   static propTypes = {
     coinbase: PropTypes.string,
     contract: PropTypes.object,
@@ -336,7 +336,7 @@ class BadVibesProvider extends Component {
 
   render() {
     return (
-      <BadVibesContext.Provider
+      <ContractContext.Provider
         value={{
           state: this.state,
           actions: {
@@ -350,7 +350,7 @@ class BadVibesProvider extends Component {
           }
         }}>
         {this.props.children}
-      </BadVibesContext.Provider>
+      </ContractContext.Provider>
     )
   }
 }
@@ -359,4 +359,4 @@ export default withWeb3(({ contract, coinbase, initialised }) => ({
   contract,
   coinbase,
   initialised
-}))(BadVibesProvider)
+}))(ContractProvider)

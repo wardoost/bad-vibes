@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 import { Header, Container, Message, Button } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 import Layout from '../components/Layout'
 import Timeline from '../components/Timeline'
 
@@ -51,7 +51,7 @@ class User extends Component {
     }
 
     return (
-      <Layout>
+      <Fragment>
         <Layout.Header>
           <Header as="h1">
             {this.props.total} message{this.props.total !== 1 && 's'} by{' '}
@@ -75,13 +75,13 @@ class User extends Component {
             )}
           </Container>
         </Layout.Content>
-      </Layout>
+      </Fragment>
     )
   }
 }
 
 export default withWeb3(({ coinbase }) => ({ coinbase }))(
-  withBadVibes(
+  withContract(
     ({ posts, addressUsername, total, loading, error }) => ({
       posts,
       authorUsername: addressUsername,

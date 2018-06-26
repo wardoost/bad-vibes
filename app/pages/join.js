@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Header, Form, Message, Input, Button } from 'semantic-ui-react'
 
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 import Layout from '../components/Layout'
 
 class Join extends Component {
@@ -22,7 +22,7 @@ class Join extends Component {
 
   render() {
     return (
-      <Layout>
+      <Fragment>
         <Layout.Header>
           <Header as="h1">
             Choose your shitty username wisely, you won't be able to change it
@@ -56,12 +56,12 @@ class Join extends Component {
             </Form.Field>
           </Form>
         </Layout.Content>
-      </Layout>
+      </Fragment>
     )
   }
 }
 
-export default withBadVibes(
+export default withContract(
   ({ loading, error }) => ({ loading, error }),
   ({ join }) => ({ join })
 )(Join)

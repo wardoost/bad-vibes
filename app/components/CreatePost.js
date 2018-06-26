@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Button } from 'semantic-ui-react'
 
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 import { validateMessage } from '../utils/validation'
 
 class CreatePost extends Component {
@@ -76,7 +76,7 @@ class CreatePost extends Component {
   }
 }
 
-export default withBadVibes(
+export default withContract(
   ({ loading, error }) => ({ loading, error }),
   ({ createPost }) => ({
     createPost

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Header, Container, Message, Button } from 'semantic-ui-react'
 
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 import Layout from '../components/Layout'
 import CreatePost from '../components/CreatePost'
 import Timeline from '../components/Timeline'
@@ -33,7 +33,7 @@ class Profile extends Component {
 
   render() {
     return (
-      <Layout>
+      <Fragment>
         <Layout.Header>
           <Header as="h1">
             {this.props.username}, you have posted {this.props.total} time{this
@@ -66,12 +66,12 @@ class Profile extends Component {
             )}
           </Container>
         </Layout.Content>
-      </Layout>
+      </Fragment>
     )
   }
 }
 
-export default withBadVibes(
+export default withContract(
   ({ username, posts, total, loading, error }) => ({
     username,
     posts,

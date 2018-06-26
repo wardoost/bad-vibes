@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Container, Menu, Message, Loader, Icon } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 
 class Layout extends Component {
   static propTypes = {
@@ -154,7 +154,7 @@ export default withRouter(
     loading,
     error
   }))(
-    withBadVibes(({ username, authenticating }) => ({
+    withContract(({ username, authenticating }) => ({
       authenticed: Boolean(username),
       authenticating
     }))(Layout)

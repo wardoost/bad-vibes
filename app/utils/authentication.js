@@ -4,7 +4,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics'
 import { Loader } from 'semantic-ui-react'
 
 import { Web3Context } from '../providers/web3'
-import { BadVibesContext } from '../providers/bad-vibes'
+import { ContractContext } from '../providers/contract'
 import { getDisplayName } from './react-helpers'
 
 export const requireInitialised = WrappedComponent => {
@@ -35,7 +35,7 @@ export const requireAuth = WrappedComponent => {
   class RequireAuth extends Component {
     render() {
       return (
-        <BadVibesContext.Consumer>
+        <ContractContext.Consumer>
           {({ state }) => {
             if (state.needAuth) {
               return <Loader active>Authenticating</Loader>
@@ -47,7 +47,7 @@ export const requireAuth = WrappedComponent => {
 
             return <WrappedComponent {...this.props} />
           }}
-        </BadVibesContext.Consumer>
+        </ContractContext.Consumer>
       )
     }
   }
@@ -60,7 +60,7 @@ export const requireNoAuth = WrappedComponent => {
   class RequireNoAuth extends Component {
     render() {
       return (
-        <BadVibesContext.Consumer>
+        <ContractContext.Consumer>
           {({ state }) => {
             if (state.needAuth) {
               return <Loader active>Authenticating</Loader>
@@ -72,7 +72,7 @@ export const requireNoAuth = WrappedComponent => {
 
             return <WrappedComponent {...this.props} />
           }}
-        </BadVibesContext.Consumer>
+        </ContractContext.Consumer>
       )
     }
   }

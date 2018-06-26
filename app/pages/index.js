@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { Container, Message, Button } from 'semantic-ui-react'
 
-import { withBadVibes } from '../providers/bad-vibes'
+import { withContract } from '../providers/contract'
 import Layout from '../components/Layout'
 import CreatePost from '../components/CreatePost'
 import Timeline from '../components/Timeline'
@@ -35,7 +35,7 @@ class Home extends Component {
 
   render() {
     return (
-      <Layout>
+      <Fragment>
         {this.props.authenticated && (
           <Layout.Header>
             <CreatePost />
@@ -80,12 +80,12 @@ class Home extends Component {
             )}
           </Container>
         </Layout.Content>
-      </Layout>
+      </Fragment>
     )
   }
 }
 
-export default withBadVibes(
+export default withContract(
   ({ username, posts, total, loading, error }) => ({
     authenticated: Boolean(username),
     posts,
