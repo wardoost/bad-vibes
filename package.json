@@ -1,6 +1,6 @@
 {
   "name": "bad-vibes",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "dependencies": {
     "hoist-non-react-statics": "^2.5.5",
     "linkify-it": "^2.0.3",

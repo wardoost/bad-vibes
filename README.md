@@ -1,6 +1,6 @@
 # 🖕 Bad Vibes
 
-![Version - 0.1.2](https://img.shields.io/badge/version-0.1.2-brightgreen.svg)
+![Version - 0.2.0](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Code Style - Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
@@ -36,7 +36,7 @@ In the future we might add a voting system that can change the way the smart con
 
 ## Beta Testing
 
-You can join the beta for free  on https://ipfs.io/ipfs/QmNhHTxGRCTvh39gE2qHrNvMDZSpmmAqcpPy9qpXkfwxE7. The UI runs fully decentralised on [IPFS](https://ipfs.io/) and the smart contract on the [Ropsten testnet](https://ropsten.etherscan.io/address/0xe4ab0ef28faf00d79e1cc49fbc5e4eb316f067bf). If you need guidance using MetaMask on the Ropsten testnet read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-rosten-test-eth-request-guide-3fddf2c3df52).
+You can join the beta for free  on https://ipfs.io/ipfs/Qmf2v5wmvyyC819fxH5BV9XdboxUnT3KdCToUheiQuabBL. The UI runs fully decentralised on [IPFS](https://ipfs.io/) and the smart contract on the [Ropsten testnet](https://ropsten.etherscan.io/address/0xe4ab0ef28faf00d79e1cc49fbc5e4eb316f067bf). If you need guidance using MetaMask on the Ropsten testnet read [this article](https://medium.com/@FairGameOnline/meta-mask-install-and-rosten-test-eth-request-guide-3fddf2c3df52).
 
 ## Development
 
