@@ -1,7 +1,7 @@
 import React, { Component, createContext } from 'react'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
-import contract from 'truffle-contract'
+import Contract from 'truffle-contract'
 
 import { connectContext } from '../utils/react-helpers'
 import { getCoinbase } from '../utils/web3-helpers'
@@ -15,7 +15,7 @@ export const withWeb3 = connectContext(Web3Context)
 // Create provider which holds all state and actions
 export default class Web3Provider extends Component {
   static propTypes = {
-    contract: PropTypes.object.isRequired,
+    contract: PropTypes.object,
     children: PropTypes.node
   }
 
@@ -59,14 +59,18 @@ export default class Web3Provider extends Component {
 
   initialise = async web3 => {
     try {
-      const instance = contract(this.props.contract)
-      instance.setProvider(web3.currentProvider)
-      const contractInstance = await instance.deployed()
       const coinbase = await getCoinbase(web3)
+      let contract = null
+
+      if (this.props.contract) {
+        const instance = Contract(this.props.contract)
+        instance.setProvider(web3.currentProvider)
+        contract = await instance.deployed()
+      }
 
       this.setState({
         web3,
-        contract: contractInstance,
+        contract,
         coinbase,
         initialised: true,
         loading: false,

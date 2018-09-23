@@ -2,8 +2,6 @@
   "name": "bad-vibes",
   "version": "0.1.2",
   "dependencies": {
-    "@material-ui/core": "^1.2.0",
-    "babel-polyfill": "^6.26.0",
     "hoist-non-react-statics": "^2.5.0",
     "linkify-it": "^2.0.3",
     "prop-types": "^15.6.1",
@@ -13,26 +11,18 @@
     "semantic-ui-react": "^0.81.1",
     "tlds": "^1.203.1",
     "truffle-contract": "^3.0.5",
-    "web3": "^1.0.0-beta.34",
-    "whatwg-fetch": "^2.0.4"
+    "web3": "^1.0.0-beta.34"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode=development --hot --open",
-    "build": "webpack --mode=production"
+    "start": "parcel ./app/index.html",
+    "build": "parcel build ./app/index.html --out-dir build/app"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-import": "^1.7.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.1",
-    "dotenv-webpack": "^1.5.7",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-prettier-standard": "^2.0.0",
@@ -44,15 +34,8 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.9.1",
     "eslint-plugin-standard": "^3.1.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "file-loader": "^1.1.11",
-    "html-webpack-plugin": "^3.2.0",
+    "parcel-bundler": "^1.9.7",
     "prettier": "^1.13.5",
-    "react-hot-loader": "^4.3.1",
-    "url-loader": "^1.0.1",
-    "webpack": "^4.12.0",
-    "webpack-cli": "^3.0.3",
-    "webpack-dev-server": "^3.1.4",
-    "webpack-md5-hash": "0.0.6"
+    "react-hot-loader": "^4.3.11"
   }
 }

@@ -58,7 +58,7 @@ Compile and deploy the smart contract
 truffle compile && truffle migrate
 ```
 
-Create a `.env` file in the root of the project and add your environment variables by following the example file `.env.example`. Start a development server for the frontend application using [Webpack](https://webpack.js.org/) dev server
+Create a `.env` file in the root of the project and add your environment variables by following the example file `.env.example`. Start a development server for the frontend application using [Parcel](https://parceljs.org/)
 
 ```bash
 npm start
