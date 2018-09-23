@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Feed } from 'semantic-ui-react'
 
 import { withWeb3 } from '../providers/web3'
-import { getEmojiFromAddress } from '../utils/web3-helpers'
+import { getEmojiFromAddress } from '../core/web3-helpers'
 import Message from './Message'
 
 const Timeline = ({ coinbase, posts }) => (

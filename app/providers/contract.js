@@ -1,8 +1,8 @@
 import React, { Component, createContext } from 'react'
 import PropTypes from 'prop-types'
 
-import { connectContext } from '../utils/react-helpers'
-import { validateMessage, validateUsername } from '../utils/validation'
+import { connectContext } from '../core/react-helpers'
+import { validateMessage, validateUsername } from '../core/validation'
 import { withWeb3 } from './web3'
 
 // Create context with React Context API

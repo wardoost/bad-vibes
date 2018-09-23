@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import linkify from '../utils/linkify'
+import linkify from '../core/linkify'
 
 export default class Message extends Component {
   static propTypes = {

@@ -15,7 +15,7 @@ import {
   requireInitialised,
   requireAuth,
   requireNoAuth
-} from './utils/authentication'
+} from './core/authentication'
 
 class App extends Component {
   render() {

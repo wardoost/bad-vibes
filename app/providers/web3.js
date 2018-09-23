@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import Web3 from 'web3'
 import Contract from 'truffle-contract'
 
-import { connectContext } from '../utils/react-helpers'
-import { getCoinbase } from '../utils/web3-helpers'
+import { connectContext } from '../core/react-helpers'
+import { getCoinbase } from '../core/web3-helpers'
 
 // Create context with React Context API
 export const Web3Context = createContext()
@@ -38,7 +38,7 @@ export default class Web3Provider extends Component {
         // Use Mist/MetaMask's provider.
         web3 = new Web3(web3.currentProvider)
 
-        console.log('Injected web3 detected.')
+        console.log('Injected web3 detected')
 
         this.initialise(web3)
       } else {
@@ -50,7 +50,7 @@ export default class Web3Provider extends Component {
 
         web3 = new Web3(provider)
 
-        console.log('No web3 instance injected, using Local web3.')
+        console.log('No web3 instance injected, using local web3')
 
         this.initialise(web3)
       }

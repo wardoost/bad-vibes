@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, Input, Button } from 'semantic-ui-react'
 
 import { withContract } from '../providers/contract'
-import { validateMessage } from '../utils/validation'
+import { validateMessage } from '../core/validation'
 
 class CreatePost extends Component {
   static propTypes = {
