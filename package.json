@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "parcel ./app/index.html",
-    "build": "parcel build ./app/index.html --out-dir build/app"
+    "prebuild": "rm -rf build/app",
+    "build": "parcel build ./app/index.html --out-dir build/app --public-url ./"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
