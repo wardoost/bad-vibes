@@ -1,7 +1,9 @@
 {
   "name": "bad-vibes",
   "version": "0.2.0",
+  "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "hoist-non-react-statics": "^2.5.5",
     "linkify-it": "^2.0.3",
     "prop-types": "^15.6.2",
@@ -10,8 +12,8 @@
     "react-router-dom": "^4.3.1",
     "semantic-ui-react": "^0.82.5",
     "tlds": "^1.203.1",
-    "truffle-contract": "^3.0.6",
-    "web3": "^1.0.0-beta.36"
+    "truffle-contract": "^4.0.5",
+    "web3": "1.0.0-beta.36"
   },
   "scripts": {
     "start": "parcel ./app/index.html",
@@ -19,11 +21,12 @@
     "build": "parcel build ./app/index.html --out-dir build/app --public-url ./"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
     "eslint": "^5.6.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-config-prettier-standard": "^2.0.0",

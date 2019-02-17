@@ -36,8 +36,8 @@ class Profile extends Component {
       <Fragment>
         <Layout.Header>
           <Header as="h1">
-            {this.props.username}, you have posted {this.props.total} time{this
-              .props.total !== 1 && 's'}
+            {this.props.username}, you have posted {this.props.total} time
+            {this.props.total !== 1 && 's'}
           </Header>
         </Layout.Header>
         <Layout.Content>

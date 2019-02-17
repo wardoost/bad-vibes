@@ -1,6 +1,6 @@
-pragma solidity ^0.4.20;
+pragma solidity 0.5.0;
 
-import './zeppelin/lifecycle/Killable.sol';
+import "./zeppelin/lifecycle/Killable.sol";
 
 contract BadVibes is Killable {
   struct User {
@@ -18,18 +18,24 @@ contract BadVibes is Killable {
   Post[] public posts;
 
   modifier onlyPublic() {
-    require(!isUser(msg.sender));
+    require(
+      !isUser(msg.sender),
+      "sender is authorized"
+    );
     _;
   }
 
   modifier onlyAuthenticated() {
-    require(isUser(msg.sender));
+    require(
+      isUser(msg.sender),
+      "sender is not authorized"
+    );
     _;
   }
 
   event LogNewPost(address indexed author, string message, uint index);
 
-  function join(string username) public onlyPublic returns(bool result) {
+  function join(string memory username) public onlyPublic returns(bool result) {
     if (isUser(msg.sender)) {
       return false;
     }
@@ -38,7 +44,7 @@ contract BadVibes is Killable {
     return true;
   }
 
-  function createPost(string message) public onlyAuthenticated returns(uint index) {
+  function createPost(string memory message) public onlyAuthenticated returns(uint index) {
     Post memory post = Post(message, msg.sender);
     posts.push(post);
 
@@ -53,7 +59,7 @@ contract BadVibes is Killable {
     return bytes(users[user].username).length > 0;
   }
 
-  function getUsername(address user) public view returns(string username) {
+  function getUsername(address user) public view returns(string memory username) {
     return users[user].username;
   }
 
@@ -61,7 +67,7 @@ contract BadVibes is Killable {
     return posts.length;
   }
 
-  function getPostAtIndex(uint index) public view returns(string message, address author) {
+  function getPostAtIndex(uint index) public view returns(string memory message, address author) {
     return (
       posts[index].message,
       posts[index].author

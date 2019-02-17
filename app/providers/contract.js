@@ -144,7 +144,7 @@ class ContractProvider extends Component {
     }
   }
 
-  formatPost = async ([message, author]) => {
+  formatPost = async ({ message, author }) => {
     if (!this.props.initialised) {
       throw new Error('Web3 or contract is not initialised')
     }
